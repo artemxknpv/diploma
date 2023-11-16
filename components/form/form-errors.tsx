@@ -1,4 +1,4 @@
-import { Divide, XCircleIcon } from "lucide-react";
+import { XCircleIcon } from "lucide-react";
 
 type FormErrorProps = {
   inputId: string;

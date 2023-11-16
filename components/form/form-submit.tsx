@@ -9,10 +9,20 @@ type FormSubmitProps = Pick<
   "variant" | "children" | "disabled" | "className"
 >;
 
-export function FormSubmit({ disabled, ...props }: FormSubmitProps) {
+export function FormSubmit({
+  disabled,
+  variant = "primary",
+  ...props
+}: FormSubmitProps) {
   const { pending } = useFormStatus();
 
   return (
-    <Button {...props} size="sm" type="submit" disabled={pending || disabled} />
+    <Button
+      {...props}
+      variant={variant}
+      size="sm"
+      type="submit"
+      disabled={pending || disabled}
+    />
   );
 }

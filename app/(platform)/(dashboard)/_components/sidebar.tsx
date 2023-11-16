@@ -38,7 +38,7 @@ export function Sidebar({ storageKey = "d-sidebar-state" }: SidebarProps) {
 
   return (
     <aside>
-      <div className="font-medium text-xs flex items-center mb-1">
+      <div className="font-medium flex items-center mb-1">
         <span className="pl-4">Workspaces</span>
         <Button
           asChild

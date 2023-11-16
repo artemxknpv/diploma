@@ -37,8 +37,10 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             </Label>
           )}
           <Input
+            ref={ref}
             {...inputProps}
             name={id}
+            disabled={pending || inputProps.disabled}
             className={cn("text-sm px-2 py-1 h-7", className)}
             aria-describedby={`${id}-error`}
           />

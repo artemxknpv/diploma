@@ -6,21 +6,46 @@ import { createSafeAction } from "@/lib/create-safe-action";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs";
 import { revalidatePath } from "next/cache";
+import { parseUnsplashImage } from "@/lib/unsplash";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-  const { userId } = auth();
+  const { userId, orgId } = auth();
 
-  if (!userId) {
+  if (!userId || !orgId) {
     return {
       error: "Unauthorized",
     };
   }
 
-  const { title } = data;
+  const { title, image } = data;
+
+  const {
+    userName,
+    id: imageId,
+    thumbUrl,
+    fullUrl,
+    htmlLink,
+  } = parseUnsplashImage(image);
+
+  if (!userName || !imageId || !thumbUrl || !fullUrl || !htmlLink) {
+    return {
+      error: "Some required fields are missing. Failed to create a board",
+    };
+  }
   let board;
 
   try {
-    board = await db.board.create({ data: { title } });
+    board = await db.board.create({
+      data: {
+        imageFullUrl: fullUrl,
+        title,
+        imageId,
+        imageLinkHTML: htmlLink,
+        imageThumbUrl: thumbUrl,
+        imageUserName: userName,
+        orgId,
+      },
+    });
   } catch (e) {
     console.error(e);
     return {

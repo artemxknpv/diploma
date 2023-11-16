@@ -31,9 +31,7 @@ export const useAction = <TInput, TOutput>(
           return;
         }
 
-        if (result.fieldErrors) {
-          setFieldErrors(result.fieldErrors);
-        }
+        setFieldErrors(result.fieldErrors);
 
         if (result.error) {
           setError(result.error);
@@ -43,7 +41,7 @@ export const useAction = <TInput, TOutput>(
         if (result.data) {
           setData(result.data);
           setError(undefined);
-          setFieldErrors(undefined)
+          setFieldErrors(undefined);
           onSuccess?.(result.data);
         }
       } finally {
