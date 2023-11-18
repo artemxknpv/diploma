@@ -68,6 +68,7 @@ export function ListHeader({ list, onAddCard }: ListHeaderProps) {
             onBlur={onBlur}
             ref={inputRef}
             id="title"
+            className="px-1"
             placeholder="Enter a new title for the list..."
             defaultValue={title}
           />
@@ -78,7 +79,7 @@ export function ListHeader({ list, onAddCard }: ListHeaderProps) {
           variant="ghost"
           textAlign="left"
           onClick={enableEditing}
-          className="w-full text-sm px-4 py-1 border-transparent flex font-semibold h-full"
+          className="mt-0.5 w-full text-sm px-3.5 border-transparent flex font-semibold"
         >
           {title}
         </Button>

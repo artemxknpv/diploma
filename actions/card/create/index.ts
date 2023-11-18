@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
-import { CreateListSchema } from "@/actions/list/create/schema";
+import { CreateCardSchema } from "@/actions/card/create/schema";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -16,39 +16,34 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  const { title, boardId } = data;
-  let list;
+  const { title, boardId, listId } = data;
+
+  let card;
   try {
-    const board = await db.board.findUnique({
+    const list = await db.list.findUnique({
       where: {
-        id: boardId,
-        orgId,
+        id: listId,
+        board: { orgId },
       },
     });
 
-    if (!board) {
-      return {
-        error: "Board not found",
-      };
+    if (!list) {
+      return { error: "List not found" };
     }
 
-    const lastListOrder =
+    const lastCardOrder =
       (
-        await db.list.findFirst({
-          where: { boardId },
+        await db.card.findFirst({
+          where: { listId },
           orderBy: { order: "desc" },
           select: { order: true },
         })
       )?.order ?? 0;
 
-    const newOrder = lastListOrder + 1;
+    const newOrder = lastCardOrder + 1;
 
-    list = await db.list.create({
-      data: {
-        title,
-        boardId,
-        order: newOrder,
-      },
+    card = await db.card.create({
+      data: { title, listId, order: newOrder },
     });
   } catch (e) {
     return {
@@ -58,7 +53,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
 
   revalidatePath(`/board/${boardId}`);
 
-  return { data: list };
+  return { data: card };
 };
 
-export const createList = createSafeAction(CreateListSchema, handler);
+export const createCard = createSafeAction(CreateCardSchema, handler);
