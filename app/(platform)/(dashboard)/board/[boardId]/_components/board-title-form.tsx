@@ -29,6 +29,7 @@ export function BoardTitleForm({ board }: BoardTitleFormProps) {
     },
     onError: toast.error,
   });
+
   const enableEditing = () => {
     setEditing(true);
     setTimeout(() => {
@@ -39,6 +40,9 @@ export function BoardTitleForm({ board }: BoardTitleFormProps) {
 
   const onSubmit = (formData: FormData) => {
     const title = formData.get("title") as string;
+
+    if (title === board.title) return disableEditing();
+
     execute({ title, id: board.id });
   };
 

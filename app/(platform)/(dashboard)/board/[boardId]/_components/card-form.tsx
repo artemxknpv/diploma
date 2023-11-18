@@ -1,6 +1,6 @@
 import { ElementRef, forwardRef, KeyboardEventHandler, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, XIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { FormTextarea } from "@/components/form/form-textarea";
 import { FormSubmit } from "@/components/form/form-submit";
 import { useParams } from "next/navigation";
@@ -23,14 +23,16 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
     ref,
   ) {
     const { boardId } = useParams<{ boardId: string }>();
-    const formRef = useRef<ElementRef<"form">>();
+    const formRef = useRef<ElementRef<"form">>(null);
 
     useEventListener("keydown", onKeyDown);
 
-    const { execute, fieldErrors } = useAction(createCard, {
+    const { execute, fieldErrors, loading } = useAction(createCard, {
       onError: toast.error,
-      onSuccess: ({ title }) =>
-        toast.success(`Card ${title} was successfully created`),
+      onSuccess: ({ title }) => {
+        toast.success(`Card ${title} was successfully created`);
+        disableEditing();
+      },
     });
 
     const onTextareaKeydown: KeyboardEventHandler<HTMLTextAreaElement> = (
@@ -47,14 +49,12 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
       const listId = formData.get("listId") as string;
       const boardId = formData.get("boardId") as string;
 
-      console.log({ listId, boardId, title });
-
       execute({ title, listId, boardId });
     };
 
     if (editing) {
       return (
-        <form action={onSubmit} className="flex flex-col gap-y-2">
+        <form action={onSubmit} ref={formRef} className="flex flex-col gap-y-2">
           <FormTextarea
             id="title"
             onKeyDown={onTextareaKeydown}
@@ -64,10 +64,16 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
           />
           <input hidden id="listId" name="listId" value={listId} readOnly />
           <input hidden id="boardId" name="boardId" value={boardId} readOnly />
+          <button hidden />
           <div className="flex items-center gap-x-2">
             <FormSubmit>Add card</FormSubmit>
-            <Button onClick={disableEditing} size="sm" variant="ghost">
-              <XIcon className="w-4 h-4" />
+            <Button
+              disabled={loading}
+              onClick={disableEditing}
+              size="sm"
+              variant="ghost"
+            >
+              Cancel
             </Button>
           </div>
         </form>

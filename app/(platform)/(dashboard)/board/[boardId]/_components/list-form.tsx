@@ -75,10 +75,10 @@ export function ListForm() {
             <Button
               disabled={loading}
               onClick={disableEditing}
-              size="icon"
+              size="sm"
               variant="ghost"
             >
-              <XIcon />
+              Cancel
             </Button>
           </div>
         </form>

@@ -51,9 +51,9 @@ export function ListHeader({ list, onAddCard }: ListHeaderProps) {
   useEventListener("keydown", disableOnEsc);
 
   return (
-    <div className="font-semibold flex justify-between items-center gap-x-2">
+    <div className="font-semibold min-h-[44px] flex justify-between items-center gap-x-2 w-full  min-w-0">
       {editing ? (
-        <form action={onSubmit} ref={formRef} className="flex-1 p-2">
+        <form action={onSubmit} ref={formRef} className="flex-1 pl-2 py-2">
           <input readOnly hidden id="id" name="id" value={list.id} />
           <input
             readOnly
@@ -75,14 +75,14 @@ export function ListHeader({ list, onAddCard }: ListHeaderProps) {
           <button hidden />
         </form>
       ) : (
-        <Button
-          variant="ghost"
-          textAlign="left"
+        <div
+          role="button"
+          title={title}
           onClick={enableEditing}
-          className="mt-0.5 w-full text-sm px-3.5 border-transparent flex font-semibold"
+          className="mt-0.5 flex-grow text-sm pl-3.5 pr-2 border-transparent flex font-semibold truncate"
         >
           {title}
-        </Button>
+        </div>
       )}
       <ListActions list={list} onAddCard={onAddCard} />
     </div>

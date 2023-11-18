@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
-import { UpdateBoardSchema } from "@/actions/board/update/schema";
+import { UpdateListOrderSchema } from "@/actions/list/update-order/schema";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -16,27 +16,27 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  const { title, id } = data;
-  let board;
+  const { items, boardId } = data;
+
+  let lists;
   try {
-    board = await db.board.update({
-      where: {
-        id,
-        orgId,
-      },
-      data: {
-        title,
-      },
-    });
+    const transaction = items.map((list) =>
+      db.list.update({
+        where: { id: list.id, board: { orgId } },
+        data: { order: list.order },
+      }),
+    );
+
+    lists = await db.$transaction(transaction);
   } catch (e) {
     return {
       error: "Failed to update",
     };
   }
 
-  revalidatePath(`/board/${id}`);
+  revalidatePath(`/board/${boardId}`);
 
-  return { data: board };
+  return { data: lists };
 };
 
-export const updateBoard = createSafeAction(UpdateBoardSchema, handler);
+export const updateListOrder = createSafeAction(UpdateListOrderSchema, handler);
