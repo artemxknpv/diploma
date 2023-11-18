@@ -6,7 +6,7 @@ import { useFormStatus } from "react-dom";
 
 type FormSubmitProps = Pick<
   ComponentProps<typeof Button>,
-  "variant" | "children" | "disabled" | "className"
+  "variant" | "children" | "disabled" | "className" | "textAlign"
 >;
 
 export function FormSubmit({
