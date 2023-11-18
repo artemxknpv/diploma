@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { ActionState } from "@/lib/create-safe-action";
-import { List } from "@prisma/client";
-import { DeleteListSchema } from "@/actions/list/delete/schema";
+import { Card } from "@prisma/client";
+import { DeleteCardSchema } from "@/actions/card/delete/schema";
 
-export type InputType = z.infer<typeof DeleteListSchema>;
-export type ReturnType = ActionState<InputType, List>;
+export type InputType = z.infer<typeof DeleteCardSchema>;
+export type ReturnType = ActionState<InputType, Card>;

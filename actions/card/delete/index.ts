@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { DeleteListSchema } from "@/actions/list/delete/schema";
+import { DeleteCardSchema } from "@/actions/card/delete/schema";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -17,10 +18,10 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   }
 
   const { id, boardId } = data;
-  let list;
+  let card;
   try {
-    list = await db.list.delete({
-      where: { id, boardId, board: { orgId } },
+    card = await db.card.delete({
+      where: { id, list: { board: { orgId } } },
     });
   } catch (e) {
     return {
@@ -29,7 +30,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   }
 
   revalidatePath(`/board/${boardId}`);
-  return { data: list };
+  return { data: card };
 };
 
-export const deleteList = createSafeAction(DeleteListSchema, handler);
+export const deleteCard = createSafeAction(DeleteCardSchema, handler);
