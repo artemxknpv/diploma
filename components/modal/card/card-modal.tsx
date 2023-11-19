@@ -6,6 +6,8 @@ import { fetcher } from "@/lib/fetcher";
 import { CardModalHeader } from "@/components/modal/card/card-modal-header";
 import { CardModalDescription } from "@/components/modal/card/card-modal-description";
 import { CardModalToolbar } from "@/components/modal/card/card-modal-toolbar";
+import { AuditLog } from "@prisma/client";
+import { CardActivity } from "@/components/modal/card/card-activity";
 
 export function CardModal() {
   const id = useCardModal((s) => s.id);
@@ -15,6 +17,11 @@ export function CardModal() {
   const { data: cardData, isLoading } = useQuery<CardWithList>({
     queryKey: ["card", id],
     queryFn: () => fetcher(`/api/card/${id}`),
+  });
+
+  const { data: cardLogs } = useQuery<AuditLog[]>({
+    queryKey: ["card-log", id],
+    queryFn: () => fetcher(`/api/card/${id}/logs`),
   });
 
   return (
@@ -32,6 +39,11 @@ export function CardModal() {
                 <CardModalDescription.Skeletion />
               ) : (
                 <CardModalDescription card={cardData} />
+              )}
+              {!cardLogs ? (
+                <CardActivity.Skeleton />
+              ) : (
+                <CardActivity logs={cardLogs} />
               )}
             </div>
           </div>

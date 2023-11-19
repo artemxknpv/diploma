@@ -27,6 +27,7 @@ export function CardModalHeader({ card }: CardModalHeaderProps) {
     onSuccess: (data) => {
       toast.success(`Card "${data.title}" updated successfully`);
       queryClient.invalidateQueries({ queryKey: ["card", card.id] });
+      queryClient.invalidateQueries({ queryKey: ["card-log", card.id] });
       disableEditing();
     },
     onError: (error) => {

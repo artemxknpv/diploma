@@ -32,6 +32,7 @@ export function CardModalDescription({ card }: CardModalDescriptionProps) {
   const { fieldErrors, execute } = useAction(updateCard, {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["card", card.id] });
+      queryClient.invalidateQueries({ queryKey: ["card-log", card.id] });
       toast.success(`Card "${data.title}" description updated`);
       disableEditing();
     },
