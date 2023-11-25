@@ -1,18 +1,20 @@
 "use server";
 
 import { InputType, ReturnType } from "./types";
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { CopyListSchema } from "@/actions/list/copy/schema";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@prisma/client";
+import { generateUserFullName } from "@/lib/card/generate-user-fullname";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-  const { userId, orgId } = auth();
+  const { orgId } = auth();
+  const user = await currentUser();
 
-  if (!userId || !orgId) {
+  if (!user || !orgId) {
     return {
       error: "Unauthorized",
     };
@@ -49,6 +51,8 @@ const handler = async (data: InputType): Promise<ReturnType> => {
               title: c.title,
               description: c.description,
               order: c.order,
+              authorId: user.id,
+              authorName: generateUserFullName(user),
             })),
           },
         },
