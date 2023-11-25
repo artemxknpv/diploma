@@ -71,14 +71,14 @@ export function ListForm() {
           />
           <input hidden value={boardId} readOnly name="boardId" />
           <div className="flex items-center gap-x-2">
-            <FormSubmit>Create list</FormSubmit>
+            <FormSubmit>Создать колонку</FormSubmit>
             <Button
               disabled={loading}
               onClick={disableEditing}
               size="sm"
               variant="ghost"
             >
-              Cancel
+              Отмена
             </Button>
           </div>
         </form>
@@ -93,7 +93,7 @@ export function ListForm() {
         className="w-full rounded-md bg-white/80 hover:bg-white/50 transition p-3 flex items-center font-medium text-sm gap-x-2"
       >
         <PlusIcon className="h-4 w-4" />
-        <span>Add a list</span>
+        <span>Создать колонку</span>
       </button>
     </ListWrapper>
   );

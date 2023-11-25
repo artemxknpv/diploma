@@ -1,5 +1,4 @@
-import { HelpCircleIcon, User2Icon } from "lucide-react";
-import { Hint } from "./hint";
+import { User2Icon } from "lucide-react";
 import { FormPopover } from "@/components/form/form-popover";
 import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
@@ -23,7 +22,7 @@ export async function BoardList() {
     <div className="space-y-4">
       <div className="flex items-center font-semibold text-lg text-neutral-700 gap-x-2">
         <User2Icon className="h-6 w-6" />
-        Your boards
+        Ваши доски
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {boards.map((board) => (
@@ -42,16 +41,7 @@ export async function BoardList() {
             role="button"
             className="aspect-video relative h-full w-ull bg-muted rounded-sm flex flex-col gap-y-1 items-center justify-center hover:opacity-75 transition"
           >
-            <p className="text-xs">Create new board</p>
-            {/*TODO actualize*/}
-            <span className="text-xs">5 remaining</span>
-            <Hint
-              sideOffset={24}
-              description="Free workspaces can carry up to 5 boards. Upgrade to Pro to create unlimited amount of boards"
-              side="bottom"
-            >
-              <HelpCircleIcon className="bottom-2 right-2 absolute h-3 w-3 text-muted-foreground" />
-            </Hint>
+            <p className="text-xs">Создать доску</p>
           </div>
         </FormPopover>
       </div>

@@ -26,7 +26,7 @@ export function Info() {
         <p className="text-semibold text-xl">{organization?.name}</p>
         <div className="flex items-center text-muted-foreground text-xs space-x-1">
           <CreditCardIcon className="h-3 w-3" />
-          <span>Free</span>
+          <span>Бесплатная версия</span>
         </div>
       </div>
     </div>

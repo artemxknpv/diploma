@@ -1,19 +1,20 @@
 "use server";
 
 import { InputType, ReturnType } from "./types";
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
-import { CopyListSchema } from "@/actions/list/copy/schema";
 import { CopyCardSchema } from "@/actions/card/copy/schema";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@prisma/client";
+import { generateUserFullName } from "@/lib/card/generate-user-fullname";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-  const { userId, orgId } = auth();
+  const { orgId } = auth();
+  const user = await currentUser();
 
-  if (!userId || !orgId) {
+  if (!user || !orgId) {
     return {
       error: "Unauthorized",
     };
@@ -44,6 +45,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         title: `${originalCard.title} - COPY`,
         description: originalCard.description,
         order: lastCard + 1,
+        authorName: generateUserFullName(user),
+        authorImage: user.imageUrl,
+        authorId: user.id,
         listId: originalCard.listId,
       },
     });

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
-import { MobileSidebar } from "@/app/(platform)/(dashboard)/_components/mobile-sidebar";
+import { MobileSidebar } from "./mobile-sidebar";
 import { FormPopover } from "@/components/form/form-popover";
 
 export function Navbar() {
@@ -16,7 +16,7 @@ export function Navbar() {
             size="sm"
             className="rounded-sm hidden md:block h-auto py-1.5 px-2"
           >
-            Create
+            Создать таблицу
           </Button>
         </FormPopover>
         <FormPopover align="start" side="bottom" sideOffset={16}>

@@ -52,26 +52,26 @@ export function CardModalDescription({ card }: CardModalDescriptionProps) {
     <div className="flex items-start gap-x-3 w-full">
       <AlignLeftIcon className="h-5 w-5 mt-0.5 text-neutral-700" />
       <div className="w-full">
-        <p className="font-semibold text-neutral-700 mb-2">Description</p>
+        <p className="font-semibold text-neutral-700 mb-2">Описание</p>
         {editing ? (
           <form action={onSubmit} className="space-y-2">
             <FormTextarea
               id="description"
               className="w-full mt-2"
               ref={inputRef as unknown as MutableRefObject<HTMLTextAreaElement>}
-              placeholder="Card description..."
+              placeholder="Описание карточки"
               errors={fieldErrors}
               defaultValue={card?.description ?? undefined}
             />
             <div className="flex items-center gap-x-2">
-              <FormSubmit>Save</FormSubmit>
+              <FormSubmit>Сохранить</FormSubmit>
               <Button
                 type="button"
                 size="sm"
                 variant="ghost"
                 onClick={disableEditing}
               >
-                Cancel
+                Отмена
               </Button>
             </div>
           </form>
@@ -81,7 +81,7 @@ export function CardModalDescription({ card }: CardModalDescriptionProps) {
             onClick={enableEditing}
             className="min-h-[78px] bg-neutral-200 hover:bg-neutral-300 text-sm font-medium py-3 px-3.5 rounded-md"
           >
-            {card.description || "Add a description to the card"}
+            {card.description || "Добавьте описание для карточки"}
           </div>
         )}
       </div>

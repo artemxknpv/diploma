@@ -39,7 +39,7 @@ export function Sidebar({ storageKey = "d-sidebar-state" }: SidebarProps) {
   return (
     <aside>
       <div className="font-medium flex items-center mb-1">
-        <span className="pl-4">Workspaces</span>
+        <span className="pl-4">Рабочие пространства</span>
         <Button
           asChild
           type="button"

@@ -1,15 +1,11 @@
-"use client";
-
 import { List } from "@prisma/client";
 import { useInput } from "@/hooks/use-input";
 import { useEventListener } from "usehooks-ts";
-import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/form/text-field";
 import { useAction } from "@/hooks/use-action";
 import { updateList } from "@/actions/list/update";
 import { toast } from "sonner";
-import { ListActions } from "@/app/(platform)/(dashboard)/board/[boardId]/_components/list-actions";
-import { noop } from "@/lib";
+import { ListActions } from "./list-actions";
 
 type ListHeaderProps = {
   list: List;
@@ -31,7 +27,7 @@ export function ListHeader({ list, onAddCard }: ListHeaderProps) {
 
   const { execute, fieldErrors, loading } = useAction(updateList, {
     onSuccess: ({ title }) => {
-      toast.success(`List "${title}" was updated successfully`);
+      toast.success(`Колонка "${title}" обновлена`);
       disableEditing();
       setInputValue(title);
     },

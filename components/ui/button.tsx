@@ -57,7 +57,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }), {
-          flex: textAlign !== "center",
           "justify-end": textAlign === "right",
           "justify-start": textAlign === "left",
         })}

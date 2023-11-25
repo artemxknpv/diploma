@@ -53,7 +53,7 @@ export function FormPopover({
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent className="w-80 pt-3" {...popoverProps}>
         <div className="text-sm font-medium text-center text-neutral-600 pb-4">
-          Create board
+          Создать доску
         </div>
         <PopoverClose asChild ref={closeIconRef}>
           <Button
@@ -69,10 +69,10 @@ export function FormPopover({
             <TextField
               errors={fieldErrors}
               id="title"
-              label="Board title"
+              label="Название доски"
               type="text"
             />
-            <FormSubmit className="w-full">Create</FormSubmit>
+            <FormSubmit className="w-full">Создать</FormSubmit>
           </div>
         </form>
       </PopoverContent>

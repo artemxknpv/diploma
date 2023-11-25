@@ -21,7 +21,7 @@ export function ActivityItem({ log }: ActivityItemProps) {
           <span>{generateLogMessage(log)}</span>
         </div>
         <span className="text-xs text-muted-foreground">
-          {format(new Date(log.createdAt), "MMM d, yyyy 'at' hh:mm")}
+          {format(new Date(log.createdAt), "MMM d, yyyy 'at' HH:mm")}
         </span>
       </div>
     </li>

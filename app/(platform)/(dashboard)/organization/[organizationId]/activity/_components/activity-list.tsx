@@ -21,7 +21,9 @@ export async function ActivityList() {
     <ol className="space-y-4 mt-4">
       <div className="justify-center p-2 text-neutral-400 gap-x-2 items-center hidden last:flex">
         <ActivityIcon className="w-4 h-4" />
-        <span>All activity logs will be displayed here</span>
+        <span>
+          Вся активность в рамках организации будет отображаться здесь
+        </span>
       </div>
       {auditLogs.map((el) => (
         <ActivityItem key={el.id} log={el} />

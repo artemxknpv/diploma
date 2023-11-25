@@ -31,7 +31,7 @@ export function CardModalToolbar({ card }: CardModalToolbarProps) {
     copyCard,
     {
       onSuccess: () => {
-        toast.success(`Card ${card.title} was successfully copied`);
+        toast.success(`Карточка "${card.title}" успешно скопирована`);
         closeModal();
       },
       onError: toast.error,
@@ -43,7 +43,7 @@ export function CardModalToolbar({ card }: CardModalToolbarProps) {
 
   return (
     <div className="space-y-2 mt-2">
-      <p className="text-xs font-semibold">Actions</p>
+      <p className="text-xs font-semibold">Действия</p>
       <Button
         className="bg-neutral-200 hover:bg-neutral-300 text-secondary-foreground w-full h-auto px-2 py-1.5 text-sm font-normal"
         textAlign="left"
@@ -51,7 +51,7 @@ export function CardModalToolbar({ card }: CardModalToolbarProps) {
         onClick={onCopy}
       >
         <CopyIcon className="h-4 w-4 mr-2" />
-        Copy
+        Дублировать
       </Button>
       <Button
         onClick={onDelete}
@@ -60,7 +60,7 @@ export function CardModalToolbar({ card }: CardModalToolbarProps) {
         textAlign="left"
       >
         <TrashIcon className="h-4 w-4 mr-2" />
-        Delete
+        Удалить
       </Button>
     </div>
   );

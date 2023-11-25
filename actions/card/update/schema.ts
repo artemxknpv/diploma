@@ -12,6 +12,9 @@ export const UpdateCardSchema = z.object({
   description: z.optional(
     z.string().min(3, { message: "Description is too short" }),
   ),
+  ownerId: z.optional(z.string()).nullable(),
+  ownerName: z.optional(z.string()).nullable(),
+  ownerImage: z.optional(z.string()).nullable(),
   id: z.string(),
   boardId: z.string(),
 });

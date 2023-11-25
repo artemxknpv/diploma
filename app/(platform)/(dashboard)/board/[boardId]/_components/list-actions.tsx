@@ -60,9 +60,7 @@ export function ListActions({ list, onAddCard }: ListOptionsProps) {
         side="bottom"
         align="start"
       >
-        <div className="text-base font-medium text-center pb-4">
-          List actions
-        </div>
+        <div className="text-base font-medium text-center pb-4">Действия</div>
         <PopoverClose asChild ref={closeRef}>
           <Button
             className="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600"
@@ -78,7 +76,7 @@ export function ListActions({ list, onAddCard }: ListOptionsProps) {
           variant="ghost"
           size="sm"
         >
-          Add a new card...
+          Создать карточку
         </Button>
         <form action={onCopyList}>
           <input readOnly hidden id="id" name="id" value={list.id} />
@@ -94,7 +92,7 @@ export function ListActions({ list, onAddCard }: ListOptionsProps) {
             className="rounded-none w-full font-normal py-1"
             textAlign="left"
           >
-            Copy list
+            Копировать колонку
           </FormSubmit>
         </form>
         <Separator className="my-2" />
@@ -112,7 +110,7 @@ export function ListActions({ list, onAddCard }: ListOptionsProps) {
             className="rounded-none w-full py-1 text-rose-500 hover:text-white hover:bg-rose-500"
             textAlign="left"
           >
-            Delete list
+            Удалить колонку
           </FormSubmit>
         </form>
       </PopoverContent>

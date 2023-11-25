@@ -66,14 +66,14 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
           <input hidden id="boardId" name="boardId" value={boardId} readOnly />
           <button hidden />
           <div className="flex items-center gap-x-2">
-            <FormSubmit>Add card</FormSubmit>
+            <FormSubmit>Создать карточку</FormSubmit>
             <Button
               disabled={loading}
               onClick={disableEditing}
               size="sm"
               variant="ghost"
             >
-              Cancel
+              Отмена
             </Button>
           </div>
         </form>
@@ -89,7 +89,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
           variant="ghost"
         >
           <PlusIcon className="h-4 w-4" />
-          <span>Add a card</span>
+          <span>Создать карточку</span>
         </Button>
       </div>
     );

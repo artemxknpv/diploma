@@ -1,7 +1,7 @@
 "use server";
 
 import { InputType, ReturnType } from "./types";
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
@@ -10,9 +10,10 @@ import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
-  const { userId, orgId } = auth();
+  const user = await currentUser();
+  const { orgId } = auth();
 
-  if (!userId || !orgId) {
+  if (!user || !orgId) {
     return {
       error: "Unauthorized",
     };
@@ -45,7 +46,15 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     const newOrder = lastCardOrder + 1;
 
     card = await db.card.create({
-      data: { title, listId, order: newOrder },
+      data: {
+        title,
+        listId,
+        order: newOrder,
+        authorId: user.id,
+        authorImage: user.imageUrl,
+        authorName:
+          `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || "unknown",
+      },
     });
 
     await createAuditLog({

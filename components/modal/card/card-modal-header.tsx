@@ -9,6 +9,9 @@ import { useParams } from "next/navigation";
 import { useAction } from "@/hooks/use-action";
 import { updateCard } from "@/actions/card/update";
 import { toast } from "sonner";
+import { CardHeaderUser } from "@/components/modal/card/card-header-user";
+import { CardSelectOwner } from "@/components/modal/card/card-select-owner";
+import { Button } from "@/components/ui/button";
 
 type CardModalHeaderProps = {
   card: CardWithList;
@@ -50,20 +53,42 @@ export function CardModalHeader({ card }: CardModalHeaderProps) {
   return (
     <div className="flex items-start gap-x-3 mb-6 w-full">
       <LayoutIcon className="h-5 w-5 mt-1 text-neutral-700" />
-      <div className="w-full">
-        <form action={onSubmit}>
-          <TextField
-            errors={fieldErrors}
-            ref={inputRef}
-            defaultValue={title}
-            id="title"
-            onBlur={onBlur}
-            className="font-semibold text-xl px-1 text-neutral-700 bg-transparent border-transparent relative -left-1.5 w-[95%] focus-visible:bg-white focus-visible:border-input mb-0.5 truncate"
+      <div className="grid md:grid-cols-4 gap-4 grid-cols-1 w-full">
+        <div className="md:col-span-3">
+          <form action={onSubmit}>
+            <TextField
+              errors={fieldErrors}
+              ref={inputRef}
+              defaultValue={title}
+              id="title"
+              onBlur={onBlur}
+              className="font-semibold text-xl px-1 text-neutral-700 bg-transparent border-transparent relative -left-1.5 w-[95%] focus-visible:bg-white focus-visible:border-input mb-0.5 truncate"
+            />
+          </form>
+          <p className="text-sm text-muted-foreground">
+            in list <span className="underline">{card.list.title}</span>
+          </p>
+        </div>
+        <div className="gap-y-2 gap-x-4 flex-col flex flex-grow">
+          <CardHeaderUser
+            imageSrc={card.authorImage}
+            title="автор"
+            userName={card.authorName}
           />
-        </form>
-        <p className="text-sm text-muted-foreground">
-          in list <span className="underline">{card.list.title}</span>
-        </p>
+          <CardSelectOwner card={card}>
+            <Button
+              variant="ghost"
+              className="w-full p-0 hover:bg-transparent font-normal h-auto"
+              textAlign="left"
+            >
+              <CardHeaderUser
+                title="владелец"
+                userName={card.ownerName ?? "Нет владельца"}
+                imageSrc={card.ownerImage}
+              />
+            </Button>
+          </CardSelectOwner>
+        </div>
       </div>
     </div>
   );
