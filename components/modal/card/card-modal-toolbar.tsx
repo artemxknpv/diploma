@@ -21,7 +21,7 @@ export function CardModalToolbar({ card }: CardModalToolbarProps) {
     deleteCard,
     {
       onSuccess: () => {
-        toast.success(`Card ${card.title} was deleted`);
+        toast.success(`Карточка "${card.title}" удалена`);
         closeModal();
       },
       onError: toast.error,

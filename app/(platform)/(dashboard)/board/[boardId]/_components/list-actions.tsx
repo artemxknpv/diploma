@@ -24,7 +24,7 @@ export function ListActions({ list, onAddCard }: ListOptionsProps) {
   const closeRef = useRef<ElementRef<"button">>(null);
   const { execute: executeCopy } = useAction(copyList, {
     onSuccess: (data) => {
-      toast.success(`List ${data.title} was created`);
+      toast.success(`Колонка "${data.title}" успешно создана`);
       closeRef.current?.click();
     },
     onError: toast.error,
@@ -32,7 +32,7 @@ export function ListActions({ list, onAddCard }: ListOptionsProps) {
 
   const { execute: executeDelete } = useAction(deleteList, {
     onSuccess: (data) => {
-      toast.success(`List ${data.title} was deleted`);
+      toast.success(`Колонка "${data.title}" была удалена`);
       closeRef.current?.click();
     },
     onError: toast.error,

@@ -30,7 +30,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
     const { execute, fieldErrors, loading } = useAction(createCard, {
       onError: toast.error,
       onSuccess: ({ title }) => {
-        toast.success(`Card ${title} was successfully created`);
+        toast.success(`Карточка "${title}" успешно создана`);
         disableEditing();
       },
     });
@@ -60,7 +60,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
             onKeyDown={onTextareaKeydown}
             ref={ref}
             errors={fieldErrors}
-            placeholder="Enter a title for this card"
+            placeholder="Введите название карточки"
           />
           <input hidden id="listId" name="listId" value={listId} readOnly />
           <input hidden id="boardId" name="boardId" value={boardId} readOnly />

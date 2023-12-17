@@ -65,7 +65,7 @@ export function ListHeader({ list, onAddCard }: ListHeaderProps) {
             ref={inputRef}
             id="title"
             className="px-1"
-            placeholder="Enter a new title for the list..."
+            placeholder="Введите новое название колонки"
             defaultValue={title}
           />
           <button hidden />

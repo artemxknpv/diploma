@@ -71,6 +71,7 @@ enum ENTITY_TYPE {
   BOARD
   LIST
   CARD
+  DOCUMENT
 }
 
 model AuditLog {
@@ -80,9 +81,26 @@ model AuditLog {
   entityId    String
   entityTitle String
   entityType  ENTITY_TYPE
-  userId      String
-  userImage   String
-  userName    String
+
+  userId    String
+  userImage String
+  userName  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Document {
+  id    String @id @default(uuid())
+  orgId String
+
+  authorId String
+
+  parentId String?
+
+  isFolder Boolean
+  title    String
+  content  String? @db.Text
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

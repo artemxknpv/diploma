@@ -23,7 +23,7 @@ export function BoardTitleForm({ board }: BoardTitleFormProps) {
 
   const { execute } = useAction(updateBoard, {
     onSuccess: ({ title }) => {
-      toast.success(`Доска "${title}" обновлена`);
+      toast.success(`Таблица "${title}" обновлена`);
       setTitle(title);
       disableEditing();
     },

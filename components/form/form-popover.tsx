@@ -32,7 +32,7 @@ export function FormPopover({
 
   const { execute, fieldErrors } = useAction(createBoard, {
     onSuccess: (data) => {
-      toast.success("Board created!");
+      toast.success(`Таблица "${data.title}" успешно создана`);
       closeIconRef.current?.click();
       router.push(`/board/${data.id}`);
     },
@@ -53,7 +53,7 @@ export function FormPopover({
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent className="w-80 pt-3" {...popoverProps}>
         <div className="text-sm font-medium text-center text-neutral-600 pb-4">
-          Создать доску
+          Создать таблицу
         </div>
         <PopoverClose asChild ref={closeIconRef}>
           <Button
@@ -69,7 +69,7 @@ export function FormPopover({
             <TextField
               errors={fieldErrors}
               id="title"
-              label="Название доски"
+              label="Название таблицы"
               type="text"
             />
             <FormSubmit className="w-full">Создать</FormSubmit>

@@ -21,12 +21,12 @@ export function ListContainer({ lists, boardId }: ListContainerProps) {
 
   const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
     onError: toast.error,
-    onSuccess: () => toast.success("Lists reordered"),
+    onSuccess: () => toast.success("Порядок колонок изменён"),
   });
 
   const { execute: executeUpdateCardOrder } = useAction(updateCardOrder, {
     onError: toast.error,
-    onSuccess: () => toast.success("Cards reordered"),
+    onSuccess: () => toast.success("Порядок карточек изменён"),
   });
 
   useEffect(() => {

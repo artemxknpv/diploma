@@ -1,7 +1,7 @@
 "use client";
 
 import { ListWrapper } from "./list-wrapper";
-import { PlusIcon, XIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { ElementRef, useRef, useState } from "react";
 import { useEventListener, useOnClickOutside } from "usehooks-ts";
 import { TextField } from "@/components/form/text-field";
@@ -32,7 +32,7 @@ export function ListForm() {
   const { execute, loading, fieldErrors } = useAction(createList, {
     onError: toast.error,
     onSuccess: ({ title }) => {
-      toast.success(`List "${title}" was successfully created`);
+      toast.success(`Колонка "${title}" успешно создана`);
       disableEditing();
       router.refresh();
     },
@@ -67,7 +67,7 @@ export function ListForm() {
             id="title"
             ref={inputRef}
             className="text-sm px-2 py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition"
-            placeholder="Enter list title"
+            placeholder="Введите название колонки"
           />
           <input hidden value={boardId} readOnly name="boardId" />
           <div className="flex items-center gap-x-2">

@@ -22,7 +22,7 @@ export async function BoardList() {
     <div className="space-y-4">
       <div className="flex items-center font-semibold text-lg text-neutral-700 gap-x-2">
         <User2Icon className="h-6 w-6" />
-        Ваши доски
+        Таблицы
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {boards.map((board) => (
@@ -41,7 +41,7 @@ export async function BoardList() {
             role="button"
             className="aspect-video relative h-full w-ull bg-muted rounded-sm flex flex-col gap-y-1 items-center justify-center hover:opacity-75 transition"
           >
-            <p className="text-xs">Создать доску</p>
+            <p className="text-xs">Создать таблицу</p>
           </div>
         </FormPopover>
       </div>

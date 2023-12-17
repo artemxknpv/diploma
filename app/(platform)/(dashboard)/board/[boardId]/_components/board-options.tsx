@@ -35,7 +35,7 @@ export function BoardOptions({ board }: BoardOptionsProps) {
       </PopoverTrigger>
       <PopoverContent className="px-0 py-3" side="bottom" align="start">
         <div className="text-sm font-medium text-center text-neutral-600 pb-4">
-          Действия с доской
+          Действия с таблицей
         </div>
         <PopoverClose asChild>
           <Button
@@ -51,7 +51,7 @@ export function BoardOptions({ board }: BoardOptionsProps) {
           onClick={onDelete}
           className="rounded-none w-full h-auto py-2 px-5 justify-start text-sm font-normal"
         >
-          Удалить доску
+          Удалить таблицу
         </Button>
       </PopoverContent>
     </Popover>

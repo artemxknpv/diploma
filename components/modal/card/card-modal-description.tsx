@@ -33,7 +33,7 @@ export function CardModalDescription({ card }: CardModalDescriptionProps) {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["card", card.id] });
       queryClient.invalidateQueries({ queryKey: ["card-log", card.id] });
-      toast.success(`Card "${data.title}" description updated`);
+      toast.success(`Описание карточки "${data.title}" обновлено`);
       disableEditing();
     },
     onError: toast.error,
