@@ -19,6 +19,7 @@ import { copyDocument } from "@/actions/document/copy";
 import { useSelectedDocuments } from "@/hooks/documents/use-selected-rows";
 import { useCurrentFolder } from "@/hooks/documents/use-current-folder";
 import { useState } from "react";
+import { useDocumentNameModal } from "@/hooks/documents/use-document-name-modal";
 
 export function useColumns() {
   const queryClient = useQueryClient();
@@ -27,6 +28,8 @@ export function useColumns() {
   const dropSelection = () => setRowSelection({});
   const currentFolder = useCurrentFolder();
   const [noFolderCopyToast, setNoFolderCopyToast] = useState(false);
+
+  const openRenameModal = useDocumentNameModal((s) => s.onOpen);
 
   const folderCopyNotSupportedNotification = () => {
     toast.warning(
@@ -64,6 +67,31 @@ export function useColumns() {
       refreshCurrentFolder();
     },
   });
+
+  const actions = (doc: Document) => [
+    {
+      label: "Копировать",
+      onClick: () => {
+        copy(doc.id);
+        toast("Документ скопирован");
+      },
+      hidden: doc.isFolder,
+    },
+    {
+      label: "Переименовать",
+      onClick: () => openRenameModal({ id: doc.id }),
+    },
+    {
+      label: "Вставить",
+      onClick: () => pasteDoc({ ids: buffer, parentId: doc.id }),
+      hidden: !doc.isFolder || !buffer.length,
+    },
+    {
+      label: "Удалить",
+      className: "text-red-400 font-medium",
+      onClick: () => deleteDoc({ ids: [doc.id] }),
+    },
+  ];
 
   const columns: ColumnDef<Document>[] = [
     {
@@ -152,31 +180,17 @@ export function useColumns() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {/*TODO add possibility to copy directories*/}
-              {!doc.isFolder && (
-                <DropdownMenuItem
-                  onClick={() => {
-                    copy(doc.id);
-                    toast("Документ скопирован");
-                  }}
-                >
-                  Копировать
-                </DropdownMenuItem>
+              {actions(doc).map((a) =>
+                a.hidden ? null : (
+                  <DropdownMenuItem
+                    onClick={a.onClick}
+                    className={a.className}
+                    key={a.label}
+                  >
+                    {a.label}
+                  </DropdownMenuItem>
+                ),
               )}
-              {doc.isFolder && !!buffer.length && (
-                <DropdownMenuItem
-                  onClick={() => pasteDoc({ ids: buffer, parentId: doc.id })}
-                >
-                  Вставить
-                </DropdownMenuItem>
-              )}
-              <DropdownMenuItem>Переименовать</DropdownMenuItem>
-              <DropdownMenuItem
-                className="text-red-400 font-medium"
-                onClick={() => deleteDoc({ ids: [row.original.id] })}
-              >
-                Удалить
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

@@ -8,12 +8,7 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { FileIcon, FolderIcon } from "lucide-react";
-import { useAction } from "@/hooks/use-action";
-import { createDocument } from "@/actions/document/create";
-import { toast } from "sonner";
-import { useSearchParams } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSelectEntity } from "@/hooks/documents/use-select-entity";
+import { useDocumentNameModal } from "@/hooks/documents/use-document-name-modal";
 
 type DocumentContextMenuItem = {
   label: string;
@@ -44,52 +39,16 @@ export function DocumentsContextMenu({ children }: DocumentsContextMenuProps) {
 }
 
 function useDocumentContextMenu() {
-  const queryClient = useQueryClient();
-  const openDocument = useSelectEntity();
-  const { execute } = useAction(createDocument, {
-    onSuccess: (data) => {
-      toast.success(data.isFolder ? "Папка создана" : "Файл создан", {
-        action: {
-          label: "Открыть",
-          onClick: () =>
-            openDocument(data.id, data.isFolder ? "folder" : "file"),
-        },
-      });
-
-      if (data.parentId) {
-        queryClient.invalidateQueries({ queryKey: ["folder", data.parentId] });
-        queryClient.invalidateQueries({
-          queryKey: ["folder-breadcrumbs", data.parentId],
-        });
-      }
-    },
-  });
-
-  const searchParams = useSearchParams();
-  const currentFolder = searchParams.get("folder");
-
-  const onCreateFile = () =>
-    execute({
-      title: "Untitled",
-      isFolder: false,
-      parentId: currentFolder ?? undefined,
-    });
-
-  const onCreateFolder = () =>
-    execute({
-      title: "Untitled",
-      isFolder: true,
-      parentId: currentFolder ?? undefined,
-    });
+  const openModal = useDocumentNameModal((s) => s.onOpen);
 
   const menuItems: DocumentContextMenuItem[] = [
     {
-      onClick: onCreateFile,
+      onClick: () => openModal({ isFolder: false }),
       label: "Создать документ",
       icon: FileIcon,
     },
     {
-      onClick: onCreateFolder,
+      onClick: () => openModal({ isFolder: true }),
       label: "Создать папку",
       icon: FolderIcon,
     },
