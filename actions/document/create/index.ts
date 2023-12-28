@@ -18,19 +18,15 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     };
   }
 
-  const { title, parentId, content, isFolder = false } = data;
-
   let document;
 
   try {
     document = await db.document.create({
       data: {
-        title,
+        ...data,
+        isFolder: !!data.isFolder,
         orgId,
-        content,
-        parentId,
-        authorId: userId,
-        isFolder,
+        public: !!data.public,
       },
     });
 

@@ -14,6 +14,7 @@ export const EditDocumentSchema = z.object({
         })
         .optional(),
       content: z.string().optional().nullable(),
+      public: z.boolean().optional(),
     }),
   ),
 });

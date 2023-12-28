@@ -12,4 +12,5 @@ export const CreateDocumentSchema = z.object({
   parentId: z.string().optional(),
   content: z.string().optional(),
   isFolder: z.boolean().optional(),
+  public: z.boolean().optional(),
 });

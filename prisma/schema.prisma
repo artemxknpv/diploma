@@ -94,13 +94,12 @@ model Document {
   id    String @id @default(uuid())
   orgId String
 
-  authorId String
-
   parentId String?
 
   isFolder Boolean
   title    String
   content  String? @db.Text
+  public   Boolean
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Document } from "@prisma/client";
-import { FileIcon, FolderIcon, MoreHorizontal } from "lucide-react";
+import { FileIcon, FolderIcon, GlobeIcon, MoreHorizontal } from "lucide-react";
 import { format } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -10,26 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { useAction } from "@/hooks/use-action";
-import { deleteDocument } from "@/actions/document/delete";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
-import { useExchangeBuffer } from "@/hooks/documents/use-copy-paste";
-import { copyDocument } from "@/actions/document/copy";
-import { useSelectedDocuments } from "@/hooks/documents/use-selected-rows";
-import { useCurrentFolder } from "@/hooks/documents/use-current-folder";
 import { useState } from "react";
-import { useDocumentNameModal } from "@/hooks/documents/use-document-name-modal";
+import { useDocumentTableColumnsActions } from "@/app/(platform)/(dashboard)/organization/[organizationId]/documents/_components/document-table-columns-actions";
 
 export function useColumns() {
-  const queryClient = useQueryClient();
-  const [copy, buffer] = useExchangeBuffer((s) => [s.set, s.buffer]);
-  const setRowSelection = useSelectedDocuments((s) => s.setRows);
-  const dropSelection = () => setRowSelection({});
-  const currentFolder = useCurrentFolder();
   const [noFolderCopyToast, setNoFolderCopyToast] = useState(false);
-
-  const openRenameModal = useDocumentNameModal((s) => s.onOpen);
+  const getActions = useDocumentTableColumnsActions();
 
   const folderCopyNotSupportedNotification = () => {
     toast.warning(
@@ -42,56 +29,6 @@ export function useColumns() {
       },
     );
   };
-
-  const refreshCurrentFolder = () => {
-    queryClient.invalidateQueries({
-      queryKey: ["folder", currentFolder],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["folder-breadcrumbs", currentFolder],
-    });
-  };
-
-  const { execute: deleteDoc } = useAction(deleteDocument, {
-    onSuccess: () => {
-      toast.success("Документ удален");
-      dropSelection();
-      refreshCurrentFolder();
-    },
-  });
-
-  const { execute: pasteDoc } = useAction(copyDocument, {
-    onSuccess: () => {
-      toast.success("Документ вставлен");
-      dropSelection();
-      refreshCurrentFolder();
-    },
-  });
-
-  const actions = (doc: Document) => [
-    {
-      label: "Копировать",
-      onClick: () => {
-        copy(doc.id);
-        toast("Документ скопирован");
-      },
-      hidden: doc.isFolder,
-    },
-    {
-      label: "Переименовать",
-      onClick: () => openRenameModal({ id: doc.id }),
-    },
-    {
-      label: "Вставить",
-      onClick: () => pasteDoc({ ids: buffer, parentId: doc.id }),
-      hidden: !doc.isFolder || !buffer.length,
-    },
-    {
-      label: "Удалить",
-      className: "text-red-400 font-medium",
-      onClick: () => deleteDoc({ ids: [doc.id] }),
-    },
-  ];
 
   const columns: ColumnDef<Document>[] = [
     {
@@ -135,7 +72,11 @@ export function useColumns() {
       accessorKey: "title",
       header: "Имя",
       cell: ({ row: { original: doc }, column }) => {
-        const Icon = doc.isFolder ? FolderIcon : FileIcon;
+        const Icon = doc.isFolder
+          ? FolderIcon
+          : doc.public
+            ? GlobeIcon
+            : FileIcon;
 
         return (
           <div
@@ -148,10 +89,6 @@ export function useColumns() {
           </div>
         );
       },
-    },
-    {
-      accessorKey: "authorId",
-      header: "Создатель",
     },
     {
       accessorKey: "createdAt",
@@ -180,7 +117,7 @@ export function useColumns() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              {actions(doc).map((a) =>
+              {getActions(doc).map((a) =>
                 a.hidden ? null : (
                   <DropdownMenuItem
                     onClick={a.onClick}

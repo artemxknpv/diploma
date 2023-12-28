@@ -49,10 +49,10 @@ const handler = async (data: InputType): Promise<ReturnType> => {
           data: {
             title: `${doc.title} - COPY`,
             content: doc.content,
-            authorId: user.id,
             parentId,
             orgId,
             isFolder: doc.isFolder,
+            public: false,
           },
         }),
       );
@@ -62,9 +62,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     revalidatePath(`/organization/${orgId}/documents`);
     return { data: copiedFiles };
   } catch (e) {
-    return {
-      error: "Failed to copy",
-    };
+    return { error: "Failed to copy" };
   }
 };
 

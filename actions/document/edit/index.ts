@@ -24,7 +24,11 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       documents.map((d) =>
         db.document.update({
           where: { orgId, id: d.id },
-          data: { title: d.title, content: d.content },
+          data: {
+            title: d.title,
+            content: d.content,
+            public: d.public,
+          },
         }),
       ),
     );
