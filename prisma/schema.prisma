@@ -4,11 +4,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-generator markdown {
-  provider = "prisma-erd-generator"
-  output   = "./ERD.png"
-}
-
 generator client {
   provider = "prisma-client-js"
 }
