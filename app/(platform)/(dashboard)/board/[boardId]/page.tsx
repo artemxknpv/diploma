@@ -7,6 +7,16 @@ type BoardIdPageProps = {
   params: { boardId: string };
 };
 
+export default async function BoardIdPage({ params }: BoardIdPageProps) {
+  const lists = await getLists(params.boardId);
+
+  return (
+    <div className="p-4 h-full overflow-x-auto">
+      <ListContainer lists={lists} boardId={params.boardId} />
+    </div>
+  );
+}
+
 async function getLists(boardId: string) {
   const { orgId } = auth();
 
@@ -30,14 +40,4 @@ async function getLists(boardId: string) {
       order: "asc",
     },
   });
-}
-
-export default async function BoardIdPage({ params }: BoardIdPageProps) {
-  const lists = await getLists(params.boardId);
-
-  return (
-    <div className="p-4 h-full overflow-x-auto">
-      <ListContainer lists={lists} boardId={params.boardId} />
-    </div>
-  );
 }

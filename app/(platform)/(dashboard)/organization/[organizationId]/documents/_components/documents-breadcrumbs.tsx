@@ -16,6 +16,7 @@ export function DocumentsBreadcrumbs() {
     {
       queryKey: ["folder-breadcrumbs", selectedFolderId],
       queryFn: () => fetcher(`/api/folders/${selectedFolderId}/breadcrumbs`),
+      enabled: !!selectedFolderId,
     },
   );
 

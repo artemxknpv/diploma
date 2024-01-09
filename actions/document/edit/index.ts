@@ -41,6 +41,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     // });
 
     revalidatePath(`/organization/${orgId}/documents`);
+
+    updatedDocs.forEach((doc) => {
+      if (doc.public) {
+        revalidatePath(`/public/${doc.id}`);
+      }
+    });
+
     return { data: updatedDocs };
   } catch (e) {
     return {

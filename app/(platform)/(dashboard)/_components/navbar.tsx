@@ -3,13 +3,16 @@ import { PlusIcon } from "lucide-react";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { MobileSidebar } from "./mobile-sidebar";
 import { FormPopover } from "@/components/form/form-popover";
+import { Logo } from "@/components/logo";
 
 export function Navbar() {
   return (
     <nav className="fixed z-50 top-0 px-4 w-full h-14 border-b shadow-sm bg-white flex items-center">
-      <div className="flex items-center gap-x-2">
+      <div className="flex items-center gap-x-4">
         <MobileSidebar />
-        <div className="hidden md:flex">[LOGO]</div>
+        <div className="hidden md:flex">
+          <Logo />
+        </div>
         <FormPopover align="start" side="bottom" sideOffset={16}>
           <Button
             variant="primary"

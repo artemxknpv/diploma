@@ -38,7 +38,7 @@ export function DocumentsContextMenu({ children }: DocumentsContextMenuProps) {
   );
 }
 
-function useDocumentContextMenu() {
+export function useDocumentContextMenu() {
   const openModal = useDocumentNameModal((s) => s.onOpen);
 
   const menuItems: DocumentContextMenuItem[] = [

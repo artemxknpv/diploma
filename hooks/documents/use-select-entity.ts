@@ -5,7 +5,7 @@ import { useCurrentFolder } from "@/hooks/documents/use-current-folder";
 export function useSelectEntity() {
   const router = useRouter();
   const pathname = usePathname();
-  const selectedFolder = useCurrentFolder();
+  const { id: selectedFolder } = useCurrentFolder();
 
   return useCallback(
     (id: string | null, entity?: "folder" | "file") => {

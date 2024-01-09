@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useDocumentTableColumnsActions } from "@/app/(platform)/(dashboard)/organization/[organizationId]/documents/_components/document-table-columns-actions";
+import { useDocumentContextMenu } from "@/app/(platform)/(dashboard)/organization/[organizationId]/documents/_components/documents-context-menu";
 
 export function useColumns() {
   const [noFolderCopyToast, setNoFolderCopyToast] = useState(false);
@@ -29,6 +30,8 @@ export function useColumns() {
       },
     );
   };
+
+  const contextMenuItems = useDocumentContextMenu();
 
   const columns: ColumnDef<Document>[] = [
     {
@@ -105,6 +108,25 @@ export function useColumns() {
     {
       id: "actions",
       meta: { selfClickable: true },
+      header: () => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button size="sm" className="h-7" variant="primary">
+              Создать...
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {contextMenuItems.map(({ icon: Icon, ...i }) => (
+              <DropdownMenuItem asChild onClick={i.onClick} key={i.label}>
+                <div className="flex gap-x-2 items-center">
+                  {Icon && <Icon className="w-4 h-4" />}
+                  {i.label}
+                </div>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
       cell: ({ row }) => {
         const doc = row.original;
 

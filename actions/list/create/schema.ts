@@ -3,9 +3,9 @@ import { z } from "zod";
 export const CreateListSchema = z.object({
   title: z
     .string({
-      required_error: "List title is required",
-      invalid_type_error: "List title is required",
+      required_error: "Имя не может быть пустым",
+      invalid_type_error: "Имя не может быть пустым",
     })
-    .min(1, "Title cannot be empty"),
+    .min(1, "Имя не может быть пустым"),
   boardId: z.string(),
 });

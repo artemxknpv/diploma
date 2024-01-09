@@ -17,11 +17,13 @@ export function CardModal() {
   const { data: cardData, isLoading } = useQuery<CardWithList>({
     queryKey: ["card", id],
     queryFn: () => fetcher(`/api/card/${id}`),
+    enabled: !!id,
   });
 
   const { data: cardLogs } = useQuery<AuditLog[]>({
     queryKey: ["card-log", id],
     queryFn: () => fetcher(`/api/card/${id}/logs`),
+    enabled: !!id,
   });
 
   return (

@@ -3,10 +3,10 @@ import { z } from "zod";
 export const CreateCardSchema = z.object({
   title: z
     .string({
-      required_error: "Card title is required",
-      invalid_type_error: "Card title is required",
+      required_error: "Имя не может быть пустым",
+      invalid_type_error: "Имя не может быть пустым",
     })
-    .min(1, "Title cannot be empty"),
+    .min(1, "Имя не может быть пустым"),
   boardId: z.string(),
   listId: z.string(),
 });

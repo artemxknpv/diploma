@@ -3,9 +3,9 @@ import { z } from "zod";
 export const UpdateBoardSchema = z.object({
   title: z
     .string({
-      required_error: "Title is required",
-      invalid_type_error: "Title is required",
+      required_error: "Имя не может быть пустым",
+      invalid_type_error: "Имя не может быть пустым",
     })
-    .min(3, "Title must have length of 3 symbols or more"),
+    .min(3, "Имя должно быть не короче 3-х символов"),
   id: z.string(),
 });

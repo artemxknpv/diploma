@@ -3,36 +3,22 @@ import { deleteDocument } from "@/actions/document/delete";
 import { toast } from "sonner";
 import { copyDocument } from "@/actions/document/copy";
 import { Document } from "@prisma/client";
-import { useQueryClient } from "@tanstack/react-query";
 import { useExchangeBuffer } from "@/hooks/documents/use-copy-paste";
 import { useSelectedDocuments } from "@/hooks/documents/use-selected-rows";
-import { useCurrentFolder } from "@/hooks/documents/use-current-folder";
 import { useDocumentNameModal } from "@/hooks/documents/use-document-name-modal";
 import { editDocument } from "@/actions/document/edit";
 import { useOrigin } from "@/hooks/use-origin";
 
 export function useDocumentTableColumnsActions() {
-  const queryClient = useQueryClient();
   const [copy, buffer] = useExchangeBuffer((s) => [s.set, s.buffer]);
   const setRowSelection = useSelectedDocuments((s) => s.setRows);
   const dropSelection = () => setRowSelection({});
-  const currentFolder = useCurrentFolder();
   const openRenameModal = useDocumentNameModal((s) => s.onOpen);
-
-  const refreshCurrentFolder = () => {
-    queryClient.invalidateQueries({
-      queryKey: ["folder", currentFolder],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["folder-breadcrumbs", currentFolder],
-    });
-  };
 
   const { execute: deleteDoc } = useAction(deleteDocument, {
     onSuccess: () => {
       toast.success("Документ удален");
       dropSelection();
-      refreshCurrentFolder();
     },
   });
 
@@ -40,7 +26,6 @@ export function useDocumentTableColumnsActions() {
     onSuccess: () => {
       toast.success("Документ вставлен");
       dropSelection();
-      refreshCurrentFolder();
     },
   });
 
@@ -88,7 +73,12 @@ export function useDocumentTableColumnsActions() {
     },
     {
       label: "Переименовать",
-      onClick: () => openRenameModal({ id: doc.id }),
+      onClick: () =>
+        openRenameModal({
+          id: doc.id,
+          title: doc.title,
+          isFolder: doc.isFolder,
+        }),
     },
     {
       label: "Вставить",

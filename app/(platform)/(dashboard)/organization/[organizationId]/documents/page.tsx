@@ -44,7 +44,7 @@ export default async function DocumentsPage({
       <Separator className="my-4" />
       <div className="grow flex">
         <Suspense>
-          <DocumentList documents={documents} />
+          <DocumentList documents={documents} params={searchParams} />
         </Suspense>
       </div>
     </div>

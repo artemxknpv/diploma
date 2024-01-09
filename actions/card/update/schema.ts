@@ -4,10 +4,10 @@ export const UpdateCardSchema = z.object({
   title: z.optional(
     z
       .string({
-        required_error: "Title is required",
-        invalid_type_error: "Title is required",
+        required_error: "Имя не может быть пустым",
+        invalid_type_error: "Имя не может быть пустым",
       })
-      .min(1, "Title cannot be empty"),
+      .min(1, "Имя не может быть пустым"),
   ),
   description: z.optional(
     z.string().min(3, { message: "Description is too short" }),

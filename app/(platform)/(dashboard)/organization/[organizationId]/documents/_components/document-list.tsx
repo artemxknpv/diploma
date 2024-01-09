@@ -1,33 +1,31 @@
-"use client";
-
 import { User2Icon } from "lucide-react";
 import { Document } from "@prisma/client";
-import { useSearchParams } from "next/navigation";
 import { DocumentTable } from "./document-table";
 import { DocumentContent } from "./document-content";
-import { useQuery } from "@tanstack/react-query";
-import { fetcher } from "@/lib/fetcher";
+import { db } from "@/lib/db";
 
 type DocumentListProps = {
   documents: Document[];
 };
 
-export async function DocumentList({ documents }: DocumentListProps) {
-  const searchParams = useSearchParams();
-
-  const selectedFileId = searchParams.get("file");
+export async function DocumentList({
+  documents,
+  params,
+}: DocumentListProps & { params: Partial<Record<"file" | "folder", string>> }) {
+  const selectedFileId = params.file;
   const selectedFile = selectedFileId
     ? documents.find((doc) => doc.id === selectedFileId && !doc.isFolder)
     : null;
 
-  const selectedFolderId = searchParams.get("folder");
+  const selectedFolderId = params.folder;
 
-  const { data } = useQuery<Document[]>({
-    queryKey: ["folder", selectedFolderId],
-    queryFn: () => fetcher(`/api/folders/${selectedFolderId}`),
-  });
+  const docsInFolder = selectedFolderId
+    ? await db.document.findMany({
+        where: { parentId: selectedFolderId },
+      })
+    : null;
 
-  const displayedDocuments = selectedFolderId ? data ?? [] : documents;
+  const displayedDocuments = selectedFolderId ? docsInFolder ?? [] : documents;
 
   return (
     <div className="gap-y-4 grow flex flex-col items-start">

@@ -17,6 +17,8 @@ export async function GET(
       where: { parentId: params.folderId },
     });
 
+    console.log({ docsInFolder });
+
     return NextResponse.json(docsInFolder);
   } catch (e) {
     return new NextResponse("Internal error", { status: 500 });

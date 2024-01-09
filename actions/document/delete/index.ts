@@ -39,7 +39,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       //   entityType: ENTITY_TYPE.DOCUMENT,
       // });
 
-      return { data: await db.$transaction(deleteTransaction) };
+      const data = await db.$transaction(deleteTransaction);
+      revalidatePath(`/organization/${orgId}/documents`);
+      return { data };
     }
 
     const idsToDelete = [...ids];

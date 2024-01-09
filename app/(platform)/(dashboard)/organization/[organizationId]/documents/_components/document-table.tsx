@@ -1,3 +1,5 @@
+"use client";
+
 import { Document } from "@prisma/client";
 import { useSelectEntity } from "@/hooks/documents/use-select-entity";
 import { DataTable } from "@/components/data-table/data-table";
@@ -10,8 +12,6 @@ import { useExchangeBuffer } from "@/hooks/documents/use-copy-paste";
 import { useAction } from "@/hooks/use-action";
 import { deleteDocument } from "@/actions/document/delete";
 import { toast } from "sonner";
-import { useCurrentFolder } from "@/hooks/documents/use-current-folder";
-import { useQueryClient } from "@tanstack/react-query";
 
 type DocumentTableProps = {
   documents: Document[];
@@ -29,23 +29,11 @@ export function DocumentTable({ documents }: DocumentTableProps) {
 
   const dropSelection = () => setRowSelection({});
   const copy = useExchangeBuffer((s) => s.set);
-  const currentFolder = useCurrentFolder();
-  const queryClient = useQueryClient();
-
-  const refreshCurrentFolder = () => {
-    queryClient.invalidateQueries({
-      queryKey: ["folder", currentFolder],
-    });
-    queryClient.invalidateQueries({
-      queryKey: ["folder-breadcrumbs", currentFolder],
-    });
-  };
 
   const { execute: deleteDoc } = useAction(deleteDocument, {
     onSuccess: () => {
       toast.success("Документ удален");
       dropSelection();
-      refreshCurrentFolder();
     },
   });
 

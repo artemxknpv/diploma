@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { createDocument } from "@/actions/document/create";
 import { useCurrentFolder } from "@/hooks/documents/use-current-folder";
-import { useQueryClient } from "@tanstack/react-query";
 import { useSelectEntity } from "@/hooks/documents/use-select-entity";
 
 export function DocumentNameModal() {
@@ -15,26 +14,25 @@ export function DocumentNameModal() {
     id,
     open,
     onClose,
-    title = "Untitled",
+    title = "Без названия",
     isFolder,
   } = useDocumentNameModal();
+
+  const { id: currentFolder, refresh } = useCurrentFolder();
 
   const { execute: editDoc, fieldErrors: editionErrors } = useAction(
     editDocument,
     {
       onSuccess: () => {
-        toast.success("Документ переименован");
+        refresh();
         onClose();
       },
     },
   );
-
-  const currentFolder = useCurrentFolder();
   const renameDoc = (id: string, newName: string) => {
     editDoc({ documents: [{ id, title: newName }] });
   };
 
-  const queryClient = useQueryClient();
   const openDocument = useSelectEntity();
 
   const { execute: createDoc, fieldErrors: creationErrors } = useAction(
@@ -49,15 +47,7 @@ export function DocumentNameModal() {
           },
         });
 
-        if (data.parentId) {
-          queryClient.invalidateQueries({
-            queryKey: ["folder", data.parentId],
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["folder-breadcrumbs", data.parentId],
-          });
-        }
-
+        refresh();
         onClose();
       },
     },
@@ -76,17 +66,21 @@ export function DocumentNameModal() {
     }
   };
 
+  const errors = {
+    title: creationErrors?.title || editionErrors?.documents,
+  };
+
   return (
     <Dialog onOpenChange={onClose} open={open}>
       <DialogContent className="w-1/3 max-w-[400px]">
-        <DialogHeader>Имя документа</DialogHeader>
+        <DialogHeader>Имя документа/папки</DialogHeader>
         <form action={onSubmit}>
           <div className="flex flex-col gap-y-3">
             <TextField
               defaultValue={title}
-              errors={{ ...creationErrors, ...editionErrors }}
+              errors={errors}
               id="title"
-              label="Введите имя документа"
+              label="Введите имя документа/папки"
               type="text"
             />
             <Button type="submit" variant="primary">
