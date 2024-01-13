@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache";
 
 import { InputType, ReturnType } from "./types";
 import { EditDocumentSchema } from "./schema";
+import { createManyAuditLogs } from "@/lib/create-audit-log";
+import { ACTION } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -33,18 +35,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       ),
     );
 
-    // createAuditLog({
-    //   action: ACTION.CREATE,
-    //   entityTitle: document.title,
-    //   entityId: document.id,
-    //   entityType: ENTITY_TYPE.DOCUMENT,
-    // });
-
+    createManyAuditLogs(updatedDocs, ACTION.UPDATE);
     revalidatePath(`/organization/${orgId}/documents`);
 
     updatedDocs.forEach((doc) => {
       if (doc.public) {
-        revalidatePath(`/public/${doc.id}`);
+        revalidatePath(`/published/${doc.id}`);
       }
     });
 

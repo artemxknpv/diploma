@@ -3,7 +3,6 @@ import { Webhook } from "svix";
 import { WebhookEvent } from "@clerk/backend";
 
 export async function POST(req: Request) {
-  console.log({ req });
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {

@@ -12,6 +12,8 @@ import { useExchangeBuffer } from "@/hooks/documents/use-copy-paste";
 import { useAction } from "@/hooks/use-action";
 import { deleteDocument } from "@/actions/document/delete";
 import { toast } from "sonner";
+import { copyDocument } from "@/actions/document/copy";
+import { useCurrentFolder } from "@/hooks/documents/use-current-folder";
 
 type DocumentTableProps = {
   documents: Document[];
@@ -28,7 +30,20 @@ export function DocumentTable({ documents }: DocumentTableProps) {
   const selectedRowsIds = Object.keys(rowSelection);
 
   const dropSelection = () => setRowSelection({});
-  const copy = useExchangeBuffer((s) => s.set);
+  const [copy, copiedItems] = useExchangeBuffer((s) => [s.set, s.buffer]);
+
+  const { execute: executePaste } = useAction(copyDocument, {
+    onSuccess: () => {
+      toast.success("Документ вставлен");
+      dropSelection();
+    },
+  });
+
+  const { id: parentId } = useCurrentFolder();
+
+  const pasteDoc = () => {
+    executePaste({ ids: copiedItems, parentId: parentId ?? undefined });
+  };
 
   const { execute: deleteDoc } = useAction(deleteDocument, {
     onSuccess: () => {
@@ -37,24 +52,47 @@ export function DocumentTable({ documents }: DocumentTableProps) {
     },
   });
 
+  const buttonsIfSelected = [
+    <Button
+      key="copy"
+      variant="secondary"
+      size="sm"
+      onClick={() => copy(selectedRowsIds)}
+    >
+      Копировать
+    </Button>,
+    <Button
+      size="sm"
+      key="del"
+      onClick={() => deleteDoc({ ids: selectedRowsIds })}
+      variant="destructive"
+    >
+      Удалить
+    </Button>,
+  ];
+
+  const buttonsIfCopied = [
+    <Button variant="secondary" key="paste" size="sm" onClick={pasteDoc}>
+      Вставить скопированные документы
+    </Button>,
+    <Button
+      variant="secondary"
+      key="drop-copy"
+      size="sm"
+      onClick={() => copy([])}
+    >
+      Сбросить копирование
+    </Button>,
+  ];
+
   return (
     <>
       <div className="w-full flex gap-x-2 items-center justify-between">
         <DocumentsBreadcrumbs />
-        {selectedRowsIds.length ? (
-          <div className="flex gap-x-2">
-            <Button size="sm" onClick={() => copy(selectedRowsIds)}>
-              Копировать
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => deleteDoc({ ids: selectedRowsIds })}
-              variant="destructive"
-            >
-              Удалить
-            </Button>
-          </div>
-        ) : null}
+        <div className="flex gap-x-2">
+          {selectedRowsIds.length ? buttonsIfSelected : null}
+          {copiedItems.length ? buttonsIfCopied : null}
+        </div>
       </div>
       <div className="flex flex-col gap-y-2 grow w-full overflow-hidden">
         <DocumentsContextMenu>

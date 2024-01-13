@@ -3,7 +3,7 @@
 import { ArrowLeftIcon, GlobeIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Document } from "@prisma/client";
-import { DocumentsEditor } from "@/app/(platform)/(dashboard)/organization/[organizationId]/documents/_components/documents-editor";
+import { DocumentsEditor } from "@/components/documents/documents-editor";
 import { useAction } from "@/hooks/use-action";
 import { editDocument } from "@/actions/document/edit";
 import { TextField } from "@/components/form/text-field";
@@ -17,7 +17,6 @@ type DocumentContentProps = {
 
 export function DocumentContent({ document }: DocumentContentProps) {
   const router = useRouter();
-  console.log({ document });
   const { execute: updateDocument } = useAction(editDocument, {});
 
   const onChange = (content: string) => {

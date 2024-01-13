@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
-import { DocumentsEditor } from "@/app/(platform)/(dashboard)/organization/[organizationId]/documents/_components/documents-editor";
+import { DocumentsEditor } from "@/components/documents/documents-editor";
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs";
+import { ValidateMount } from "@/components/validate-mount";
 
 type PublicPageProps = {
   params: {
@@ -9,20 +9,15 @@ type PublicPageProps = {
   };
 };
 
-export default async function PublicPage({
+export default async function PublicDocumentPage({
   params: { docId },
 }: PublicPageProps) {
-  const { orgId } = auth();
-
-  if (!docId || !orgId) {
+  if (!docId) {
     redirect("/");
   }
 
   const doc = await db.document.findUnique({
-    where: {
-      id: docId,
-      orgId,
-    },
+    where: { id: docId },
   });
 
   if (!doc || !doc.public) {
@@ -34,10 +29,12 @@ export default async function PublicPage({
       <h2 className="text-zinc-600 text-4xl font-bold px-[54px]">
         {doc.title}
       </h2>
-      <DocumentsEditor
-        editable={false}
-        initialContent={doc.content ?? undefined}
-      />
+      <ValidateMount>
+        <DocumentsEditor
+          editable={false}
+          initialContent={doc.content ?? undefined}
+        />
+      </ValidateMount>
     </div>
   );
 }

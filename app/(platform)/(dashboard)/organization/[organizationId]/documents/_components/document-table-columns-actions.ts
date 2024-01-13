@@ -67,7 +67,7 @@ export function useDocumentTableColumnsActions() {
     {
       label: "Скопировать публичную ссылку",
       onClick: () => {
-        copyText(`${origin}/public/${doc.id}`);
+        copyText(`${origin}/published/${doc.id}`);
       },
       hidden: doc.isFolder || !doc.public,
     },

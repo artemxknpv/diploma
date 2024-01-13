@@ -6,7 +6,8 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { CopyDocumentSchema } from "@/actions/document/copy/schema";
-import { Document } from "@prisma/client";
+import { ACTION, Document } from "@prisma/client";
+import { createManyAuditLogs } from "@/lib/create-audit-log";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { orgId } = auth();
@@ -47,7 +48,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       const transactionCopy = originalDocs.map((doc) =>
         db.document.create({
           data: {
-            title: `${doc.title} - COPY`,
+            title: `${doc.title} (копия)`,
             content: doc.content,
             parentId,
             orgId,
@@ -57,6 +58,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         }),
       );
       copiedFiles = await db.$transaction(transactionCopy);
+      createManyAuditLogs(copiedFiles, ACTION.CREATE);
     }
 
     revalidatePath(`/organization/${orgId}/documents`);

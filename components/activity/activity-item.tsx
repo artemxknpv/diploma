@@ -1,7 +1,7 @@
 import { AuditLog } from "@prisma/client";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { generateLogMessage } from "@/lib/generate-log-message";
-import { format } from "date-fns";
+import { formatRu } from "@/lib/date";
 
 type ActivityItemProps = {
   log: AuditLog;
@@ -21,7 +21,7 @@ export function ActivityItem({ log }: ActivityItemProps) {
           <span>{generateLogMessage(log)}</span>
         </div>
         <span className="text-xs text-muted-foreground">
-          {format(new Date(log.createdAt), "MMM d, yyyy 'at' HH:mm")}
+          {formatRu(log.createdAt, "MMM d, yyyy 'в' HH:mm")}
         </span>
       </div>
     </li>

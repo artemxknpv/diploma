@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { DeleteDocumentSchema } from "./schema";
 import { redirect } from "next/navigation";
+import { createManyAuditLogs } from "@/lib/create-audit-log";
+import { ACTION } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   const { userId, orgId } = auth();
@@ -32,14 +34,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         }),
       );
 
-      // createAuditLog({
-      //   action: ACTION.DELETE,
-      //   entityTitle: entityToDelete.title,
-      //   entityId: entityToDelete.id,
-      //   entityType: ENTITY_TYPE.DOCUMENT,
-      // });
-
       const data = await db.$transaction(deleteTransaction);
+      createManyAuditLogs(data, ACTION.DELETE);
+
       revalidatePath(`/organization/${orgId}/documents`);
       return { data };
     }
@@ -67,6 +64,7 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     );
 
     const deletedItems = await db.$transaction(deleteTransaction);
+    createManyAuditLogs(deletedItems, ACTION.DELETE);
 
     revalidatePath(`/organization/${orgId}/documents`);
     try {

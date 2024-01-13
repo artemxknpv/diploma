@@ -15,7 +15,6 @@ export function Navbar() {
         </div>
         <FormPopover align="start" side="bottom" sideOffset={16}>
           <Button
-            variant="primary"
             size="sm"
             className="rounded-sm hidden md:block h-auto py-1.5 px-2"
           >
@@ -23,11 +22,7 @@ export function Navbar() {
           </Button>
         </FormPopover>
         <FormPopover align="start" side="bottom" sideOffset={16}>
-          <Button
-            variant="primary"
-            size="sm"
-            className="rounded-sm block md:hidden"
-          >
+          <Button size="sm" className="rounded-sm block md:hidden">
             <PlusIcon className="w-4 h-4" />
           </Button>
         </FormPopover>

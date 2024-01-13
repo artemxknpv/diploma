@@ -8,6 +8,7 @@ import { CardModalDescription } from "@/components/modal/card/card-modal-descrip
 import { CardModalToolbar } from "@/components/modal/card/card-modal-toolbar";
 import { AuditLog } from "@prisma/client";
 import { CardActivity } from "@/components/modal/card/card-activity";
+import { LoadSkeleton } from "@/components/load-skeleton";
 
 export function CardModal() {
   const id = useCardModal((s) => s.id);
@@ -29,31 +30,35 @@ export function CardModal() {
   return (
     <Dialog onOpenChange={onClose} open={open}>
       <DialogContent>
-        {isLoading || !cardData ? (
-          <CardModalHeader.Skeleton />
-        ) : (
-          <CardModalHeader card={cardData} />
-        )}
+        <LoadSkeleton
+          fallback={<CardModalHeader.Skeleton />}
+          loading={!cardData || isLoading}
+        >
+          <CardModalHeader card={cardData!} />
+        </LoadSkeleton>
         <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4">
           <div className="col-span-3">
             <div className="w-full space-y-6">
-              {!cardData ? (
-                <CardModalDescription.Skeletion />
-              ) : (
-                <CardModalDescription card={cardData} />
-              )}
-              {!cardLogs ? (
-                <CardActivity.Skeleton />
-              ) : (
-                <CardActivity logs={cardLogs} />
-              )}
+              <LoadSkeleton
+                loading={!cardData}
+                fallback={<CardModalDescription.Skeletion />}
+              >
+                <CardModalDescription card={cardData!} />
+              </LoadSkeleton>
+              <LoadSkeleton
+                loading={!cardLogs}
+                fallback={<CardActivity.Skeleton />}
+              >
+                <CardActivity logs={cardLogs!} />
+              </LoadSkeleton>
             </div>
           </div>
-          {!cardData ? (
-            <CardModalToolbar.Skeleton />
-          ) : (
-            <CardModalToolbar card={cardData} />
-          )}
+          <LoadSkeleton
+            loading={!cardData}
+            fallback={<CardModalToolbar.Skeleton />}
+          >
+            <CardModalToolbar card={cardData!} />
+          </LoadSkeleton>
         </div>
       </DialogContent>
     </Dialog>

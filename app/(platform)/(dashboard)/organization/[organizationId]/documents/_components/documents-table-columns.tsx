@@ -1,7 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Document } from "@prisma/client";
 import { FileIcon, FolderIcon, GlobeIcon, MoreHorizontal } from "lucide-react";
-import { format } from "date-fns";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
@@ -14,6 +13,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { useDocumentTableColumnsActions } from "@/app/(platform)/(dashboard)/organization/[organizationId]/documents/_components/document-table-columns-actions";
 import { useDocumentContextMenu } from "@/app/(platform)/(dashboard)/organization/[organizationId]/documents/_components/documents-context-menu";
+import { formatRu } from "@/lib/date";
 
 export function useColumns() {
   const [noFolderCopyToast, setNoFolderCopyToast] = useState(false);
@@ -97,13 +97,13 @@ export function useColumns() {
       accessorKey: "createdAt",
       header: "Дата создания",
       cell: ({ row: { original: doc } }) =>
-        format(new Date(doc.createdAt), "HH:mm:ss, dd.MM.yyyy"),
+        formatRu(doc.createdAt, "HH:mm:ss, dd.MM.yyyy"),
     },
     {
       accessorKey: "updatedAt",
       header: "Обновлено",
       cell: ({ row: { original: doc } }) =>
-        format(new Date(doc.updatedAt), "HH:mm:ss, dd.MM.yyyy"),
+        formatRu(doc.updatedAt, "HH:mm:ss, dd.MM.yyyy"),
     },
     {
       id: "actions",
@@ -111,7 +111,7 @@ export function useColumns() {
       header: () => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="sm" className="h-7" variant="primary">
+            <Button size="sm" className="h-7">
               Создать...
             </Button>
           </DropdownMenuTrigger>

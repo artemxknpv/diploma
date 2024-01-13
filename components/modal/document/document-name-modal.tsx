@@ -83,9 +83,7 @@ export function DocumentNameModal() {
               label="Введите имя документа/папки"
               type="text"
             />
-            <Button type="submit" variant="primary">
-              Сохранить
-            </Button>
+            <Button type="submit">Сохранить</Button>
           </div>
         </form>
       </DialogContent>
