@@ -79,9 +79,13 @@ export function CardModalDescription({ card }: CardModalDescriptionProps) {
           <div
             role="button"
             onClick={enableEditing}
-            className="min-h-[78px] bg-neutral-200 hover:bg-neutral-300 text-sm font-medium py-3 px-3.5 rounded-md"
+            className="min-h-[78px] bg-neutral-200 hover:bg-neutral-300 text-sm font-medium py-3 px-3.5 rounded-md break-words max-h-[200px] overflow-y-auto"
           >
-            {card.description || "Добавьте описание для карточки"}
+            {card.description || (
+              <span className="font-normal text-muted-foreground">
+                Добавьте описание для карточки
+              </span>
+            )}
           </div>
         )}
       </div>
@@ -89,7 +93,7 @@ export function CardModalDescription({ card }: CardModalDescriptionProps) {
   );
 }
 
-CardModalDescription.Skeletion = function DescriptionSkeleton() {
+CardModalDescription.Skeleton = function DescriptionSkeleton() {
   return (
     <div className="flex items-start gap-x-3 w-full">
       <Skeleton className="w-6 h-6 bg-neutral-200" />

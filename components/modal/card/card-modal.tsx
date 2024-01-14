@@ -9,15 +9,16 @@ import { CardModalToolbar } from "@/components/modal/card/card-modal-toolbar";
 import { AuditLog } from "@prisma/client";
 import { CardActivity } from "@/components/modal/card/card-activity";
 import { LoadSkeleton } from "@/components/load-skeleton";
+import { getCardData } from "@/components/modal/card/___TEST___getCardData";
 
 export function CardModal() {
   const id = useCardModal((s) => s.id);
   const open = useCardModal((s) => s.open);
   const onClose = useCardModal((s) => s.onClose);
 
-  const { data: cardData, isLoading } = useQuery<CardWithList>({
+  const { data: cardData, isLoading } = useQuery<CardWithList | null>({
     queryKey: ["card", id],
-    queryFn: () => fetcher(`/api/card/${id}`),
+    queryFn: () => getCardData(id!),
     enabled: !!id,
   });
 
@@ -41,7 +42,7 @@ export function CardModal() {
             <div className="w-full space-y-6">
               <LoadSkeleton
                 loading={!cardData}
-                fallback={<CardModalDescription.Skeletion />}
+                fallback={<CardModalDescription.Skeleton />}
               >
                 <CardModalDescription card={cardData!} />
               </LoadSkeleton>

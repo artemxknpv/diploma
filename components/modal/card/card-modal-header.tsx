@@ -66,7 +66,7 @@ export function CardModalHeader({ card }: CardModalHeaderProps) {
             />
           </form>
           <p className="text-sm text-muted-foreground">
-            in list <span className="underline">{card.list.title}</span>
+            колонка <span className="underline">{card.list.title}</span>
           </p>
         </div>
         <div className="gap-y-2 gap-x-4 flex-col flex flex-grow">

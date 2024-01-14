@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs";
 import { db } from "@/lib/db";
 
 export async function GET(
-  req: Request,
+  _req: Request,
   { params }: { params: { cardId: string } },
 ) {
   try {

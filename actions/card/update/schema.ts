@@ -9,9 +9,7 @@ export const UpdateCardSchema = z.object({
       })
       .min(1, "Имя не может быть пустым"),
   ),
-  description: z.optional(
-    z.string().min(3, { message: "Description is too short" }),
-  ),
+  description: z.optional(z.string()),
   ownerId: z.optional(z.string()).nullable(),
   ownerName: z.optional(z.string()).nullable(),
   ownerImage: z.optional(z.string()).nullable(),

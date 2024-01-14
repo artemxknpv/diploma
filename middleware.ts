@@ -7,9 +7,9 @@ import { NextResponse } from "next/server";
 export default authMiddleware({
   publicRoutes: ["/", "/api/webhooks(.*)", "/published(.*)"],
   afterAuth: (auth, req) => {
-    const authorizedButOnPublic = auth.userId && auth.isPublicRoute;
+    const authorizedButOnRoot = auth.userId && req.nextUrl.pathname === "/";
 
-    if (authorizedButOnPublic) {
+    if (authorizedButOnRoot) {
       const orgSelection = new URL(
         auth.orgId ? `/organization/${auth.orgId}` : "/select-org",
         req.url,

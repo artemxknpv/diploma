@@ -11,7 +11,7 @@ type DocumentsEditorProps = {
   editable?: boolean;
 };
 
-export function DocumentsEditor({
+export default function DocumentsEditor({
   editable,
   initialContent,
   onChange,

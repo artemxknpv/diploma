@@ -18,25 +18,11 @@ export default async function DocumentsPage({
     return redirect("/select-org");
   }
 
-  const getDocs = () => {
-    if (searchParams.file) {
-      return db.document.findMany({
-        where: { orgId, id: searchParams.file },
-      });
-    }
-
-    if (searchParams.folder) {
-      return db.document.findMany({
-        where: { orgId, parentId: searchParams.folder },
-      });
-    }
-
-    return db.document.findMany({
-      where: { orgId, parentId: null },
-    });
-  };
-
-  const documents = await getDocs();
+  const documents = await getDocs(
+    orgId,
+    searchParams.file,
+    searchParams.folder,
+  );
 
   return (
     <div className="w-full grow flex flex-col mb-20">
@@ -50,3 +36,15 @@ export default async function DocumentsPage({
     </div>
   );
 }
+
+const getDocs = (orgId: string, fileId?: string, parentId?: string) => {
+  if (fileId) {
+    return db.document.findMany({
+      where: { orgId, id: fileId },
+    });
+  }
+
+  return db.document.findMany({
+    where: { orgId, parentId: parentId ?? null },
+  });
+};

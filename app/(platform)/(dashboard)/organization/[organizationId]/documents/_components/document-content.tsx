@@ -3,13 +3,19 @@
 import { ArrowLeftIcon, GlobeIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Document } from "@prisma/client";
-import { DocumentsEditor } from "@/components/documents/documents-editor";
 import { useAction } from "@/hooks/use-action";
 import { editDocument } from "@/actions/document/edit";
 import { TextField } from "@/components/form/text-field";
 import { useInput } from "@/hooks/use-input";
 import { toast } from "sonner";
 import { useEventListener } from "usehooks-ts";
+import dynamic from "next/dynamic";
+import { cn } from "@/lib";
+
+const DocumentsEditor = dynamic(
+  () => import("@/components/documents/documents-editor"),
+  { ssr: false },
+);
 
 type DocumentContentProps = {
   document: Document;
@@ -36,10 +42,11 @@ export function DocumentContent({ document }: DocumentContentProps) {
   } = useInput(document.title);
 
   const { execute, fieldErrors, loading } = useAction(editDocument, {
-    onSuccess: () => {
-      toast.success(`Колонка "${title}" обновлена`);
+    onSuccess: (data) => {
+      const newTitle = data.at(-1)?.title ?? title;
+      toast.success(`Документ "${newTitle}" обновлен`);
       disableEditing();
-      setInputValue(title);
+      setInputValue(newTitle);
     },
   });
 
@@ -49,7 +56,7 @@ export function DocumentContent({ document }: DocumentContentProps) {
     const title = formData.get("title") as string;
     const id = formData.get("id") as string;
 
-    if (title === document.title) return disableEditing();
+    if (title === document.title || title.length < 3) return disableEditing();
 
     execute({ documents: [{ title, id }] });
   };
@@ -65,7 +72,7 @@ export function DocumentContent({ document }: DocumentContentProps) {
       </div>
       <div className="px-[54px] flex items-center">
         {editing ? (
-          <form action={onSubmit} ref={formRef} className="flex-1 pl-2 py-2">
+          <form action={onSubmit} ref={formRef} className="flex-1">
             <input readOnly hidden id="id" name="id" value={document.id} />
             <TextField
               disabled={loading}
@@ -73,24 +80,25 @@ export function DocumentContent({ document }: DocumentContentProps) {
               onBlur={onBlur}
               ref={inputRef}
               id="title"
-              className="px-1"
-              placeholder="Введите новое название колонки"
+              className="font-bold px-0 bg-transparent border-none focus-visible:ring-transparent focus-visible:ring-offset-0 text-4xl text-zinc-600 h-10"
               defaultValue={title}
             />
             <button hidden />
           </form>
         ) : (
-          <h2
-            role="button"
-            onClick={enableEditing}
-            className="text-zinc-600 text-4xl font-semibold"
-          >
-            {document.title}
-          </h2>
+          <>
+            <h2
+              role="button"
+              onClick={enableEditing}
+              className="text-zinc-600 text-4xl font-semibold"
+            >
+              {document.title}
+            </h2>
+            {document.public ? (
+              <GlobeIcon className="ml-2 w-5 h-5 text-zinc-600" />
+            ) : null}
+          </>
         )}
-        {document.public ? (
-          <GlobeIcon className="ml-2 w-5 h-5 text-zinc-600" />
-        ) : null}
       </div>
 
       <DocumentsEditor

@@ -11,7 +11,7 @@ export const CreateBoardSchema = z.object({
     }),
 
   image: z.string({
-    required_error: "Image is required",
-    invalid_type_error: "Image is required",
+    required_error: "Необходимо выбрать фоновое изображение",
+    invalid_type_error: "Необходимо выбрать фоновое изображение",
   }),
 });

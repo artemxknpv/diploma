@@ -1,7 +1,12 @@
 import { notFound, redirect } from "next/navigation";
-import { DocumentsEditor } from "@/components/documents/documents-editor";
 import { db } from "@/lib/db";
 import { ValidateMount } from "@/components/validate-mount";
+import dynamic from "next/dynamic";
+
+const DocumentsEditor = dynamic(
+  () => import("@/components/documents/documents-editor"),
+  { ssr: false },
+);
 
 type PublicPageProps = {
   params: {
